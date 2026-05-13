@@ -1,0 +1,18 @@
+{
+  "title": "Build Generative UI",
+  "icon": "lucide/Paintbrush",
+  "pages": [
+    "---Controlled---",
+    "tool-based",
+    "tool-rendering",
+    "state-rendering",
+    "reasoning",
+    "your-components",
+    "---Declarative---",
+    "a2ui",
+    "a2ui/dynamic-schema",
+    "a2ui/fixed-schema",
+    "---Open-Ended---",
+    "mcp-apps"
+  ]
+}

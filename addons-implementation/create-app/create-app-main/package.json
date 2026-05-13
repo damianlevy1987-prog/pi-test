@@ -1,0 +1,47 @@
+{
+  "name": "@mariozechner/create-app",
+  "version": "1.0.11",
+  "description": "Project scaffolding for TypeScript applications and libraries",
+  "bin": {
+    "create-app": "dist/cli.js"
+  },
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "check": "biome check --write . && tsc --noEmit",
+    "prepublishOnly": "npm run build",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "chalk": "^5.4.1",
+    "istextorbinary": "^9.5.0",
+    "js-yaml": "^4.1.0",
+    "prompts": "^2.4.2"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.1.2",
+    "@types/js-yaml": "^4.0.9",
+    "@types/prompts": "^2.4.9",
+    "husky": "^9.1.1",
+    "typescript": "^5.8.3"
+  },
+  "keywords": [
+    "cli",
+    "docker",
+    "caddy",
+    "deployment",
+    "templates"
+  ],
+  "author": "Mario Zechner <contact@mariozechner.at>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/badlogic/create-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/badlogic/create-app/issues"
+  },
+  "homepage": "https://github.com/badlogic/create-app#readme"
+}

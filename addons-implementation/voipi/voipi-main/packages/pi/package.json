@@ -1,0 +1,42 @@
+{
+  "name": "@pithings/voipi-pi",
+  "version": "0.0.1",
+  "description": "Pi extension that adds text-to-speech tools and commands powered by VoiPi",
+  "keywords": [
+    "pi-extension",
+    "pi-package",
+    "text-to-speech",
+    "tts",
+    "voice",
+    "voipi"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pithings/voipi.git",
+    "directory": "packages/pi"
+  },
+  "files": [
+    "README.md",
+    "extensions"
+  ],
+  "type": "module",
+  "dependencies": {
+    "typebox": "^1.1.33",
+    "voipi": "latest"
+  },
+  "devDependencies": {
+    "@mariozechner/pi-coding-agent": "*",
+    "@mariozechner/pi-tui": "*"
+  },
+  "peerDependencies": {
+    "@mariozechner/pi-coding-agent": "*",
+    "@mariozechner/pi-tui": "*",
+    "typebox": "^1.1.33"
+  },
+  "pi": {
+    "extensions": [
+      "./extensions/*.ts"
+    ]
+  }
+}

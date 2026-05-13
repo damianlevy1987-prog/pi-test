@@ -1,0 +1,8 @@
+{
+  "title": "A2A",
+  "root": true,
+  "pages": [
+    "---Generative UI---",
+    "...generative-ui"
+  ]
+}
