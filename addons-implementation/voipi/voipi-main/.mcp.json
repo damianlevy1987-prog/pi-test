@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "voipi": {
+      "command": "zsh",
+      "args": ["-lc", "node src/cli/index.ts mcp"]
+    }
+  }
+}

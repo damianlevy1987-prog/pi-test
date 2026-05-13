@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="https://raw.githubusercontent.com/pithings/voipi/main/logo.svg"
+    />
+    <title>voipi — Universal Text-to-Speech for JavaScript</title>
+    <meta
+      name="description"
+      content="Give your apps, CLIs, and agents a voice. Zero-dependency, free text-to-speech library for JavaScript."
+    />
+    <meta property="og:title" content="voipi — Universal Text-to-Speech for JavaScript" />
+    <meta
+      property="og:description"
+      content="Give your apps, CLIs, and agents a voice. Zero-dependency, free text-to-speech library for JavaScript."
+    />
+    <meta property="og:image" content="https://voipi.vercel.app/social.png" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="voipi — Universal Text-to-Speech for JavaScript" />
+    <meta
+      name="twitter:description"
+      content="Give your apps, CLIs, and agents a voice. Zero-dependency, free text-to-speech library for JavaScript."
+    />
+    <meta name="twitter:image" content="https://voipi.vercel.app/social.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <script type="module" src="./demo.js"></script>
+  </head>
+  <body>
+    <!-- Hero -->
+    <div class="container">
+      <section class="hero">
+        <a href="/" class="hero-brand">
+          <img
+            src="https://raw.githubusercontent.com/pithings/voipi/main/logo.svg"
+            alt="voipi"
+            class="hero-logo"
+          />
+          <h1>voipi</h1>
+        </a>
+        <p>
+          Give your apps, CLIs, and agents a voice. Universal, zero-dependency, free text-to-speech
+          for JavaScript.
+        </p>
+        <div class="features-tags">
+          <span class="feature-tag">Zero Dependencies</span>
+          <span class="feature-tag">4 Providers</span>
+          <span class="feature-tag">322+ Neural Voices</span>
+          <span class="feature-tag">40+ Languages</span>
+          <span class="feature-tag">Offline Support</span>
+          <span class="feature-tag">Language Detection</span>
+          <span class="feature-tag">Length Estimation</span>
+          <span class="feature-tag">CLI & API</span>
+          <span class="feature-tag">Cross-platform</span>
+          <span class="feature-tag">Free & Open Source</span>
+        </div>
+        <div class="hero-actions">
+          <a href="https://github.com/pithings/voipi" class="btn btn-primary">GitHub</a>
+          <a href="#samples" class="btn btn-outline">Listen to samples</a>
+        </div>
+        <div class="demo-wrap">
+          <img src="./demo.svg" alt="voipi CLI demo" />
+        </div>
+        <div id="mcp" class="mcp-section">
+          <h3 class="mcp-title">MCP</h3>
+          <div class="mcp-install" onclick="copyInstall(this)">
+            <code
+              ><span class="prefix">$</span> npx <span class="cmd-bin">voipi</span>
+              <span class="cmd-arg">mcp --install</span></code
+            >
+            <span class="copied">Copied!</span>
+          </div>
+          <span class="mcp-hint"
+            >Supports Claude Code · Codex · Cursor · Windsurf · OpenCode · Pi</span
+          >
+        </div>
+
+        <h3 class="demo-title">CLI</h3>
+        <div class="install" onclick="copyInstall(this)">
+          <code
+            ><span class="prefix">$</span> npx <span class="cmd-bin">voipi</span>
+            <span class="cmd-arg">'Hello VoiPi.'</span></code
+          >
+          <span class="copied">Copied!</span>
+          <span class="runner-switch" onclick="event.stopPropagation()">
+            <button class="runner-opt active" data-runner="npx">npx</button>
+            <button class="runner-opt" data-runner="pnpx">pnpx</button>
+            <button class="runner-opt" data-runner="bunx">bunx</button>
+          </span>
+        </div>
+        <h3 class="demo-title">Programmatic</h3>
+        <pre class="demo-snippet" onclick="copySnippet(this)">
+          <span class="copied">Copied!</span>
+        </pre>
+        <div class="demo-text-row">
+          <textarea id="demo-text" rows="2" placeholder="Text to speak">Hello VoiPi!</textarea>
+          <div class="demo-text-overlay">
+            <span id="demo-detected-lang" class="demo-duration" title="Detected language"></span>
+            <span id="demo-duration" class="demo-duration" title="Estimated speech duration"></span>
+          </div>
+        </div>
+        <div class="demo-picker">
+          <div class="demo-picker-row">
+            <select id="demo-provider"></select>
+            <select id="demo-voice"></select>
+          </div>
+          <div class="demo-picker-row">
+            <select id="demo-lang" title="Language (overrides auto-detection)"></select>
+            <select id="demo-rate" title="Speech rate (1 = normal)">
+              <option value="">Speed: Normal</option>
+              <option value="0.5">0.5×</option>
+              <option value="0.75">0.75×</option>
+              <option value="1">1×</option>
+              <option value="1.25">1.25×</option>
+              <option value="1.5">1.5×</option>
+              <option value="2">2×</option>
+              <option value="3">3×</option>
+            </select>
+            <input
+              id="demo-output"
+              type="text"
+              placeholder="e.g. hello.mp3"
+              title="Save to file instead of playing"
+            />
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Samples -->
+    <div class="container">
+      <section id="samples">
+        <h2 class="section-title">Samples</h2>
+        <div class="samples-grid">
+          <div class="sample">
+            <div class="sample-header">
+              <span class="sample-name">macOS</span>
+              <span class="sample-tag">Native</span>
+            </div>
+            <audio controls preload="metadata" src="./samples/macos.mp4"></audio>
+          </div>
+          <div class="sample">
+            <div class="sample-header">
+              <span class="sample-name">Piper</span>
+              <span class="sample-tag">Offline Neural</span>
+            </div>
+            <audio controls preload="metadata" src="./samples/piper.mp4"></audio>
+          </div>
+          <div class="sample">
+            <div class="sample-header">
+              <span class="sample-name">Edge TTS</span>
+              <span class="sample-tag">322+ voices</span>
+            </div>
+            <audio controls preload="metadata" src="./samples/edge-tts.mp4"></audio>
+          </div>
+          <div class="sample">
+            <div class="sample-header">
+              <span class="sample-name">Google TTS</span>
+              <span class="sample-tag">55+ languages</span>
+            </div>
+            <audio controls preload="metadata" src="./samples/google-tts.mp4"></audio>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Sponsors -->
+    <div class="container" style="text-align: center; margin-bottom: 2rem">
+      <h2 class="section-title">Sponsors</h2>
+      <object
+        data="https://sponsors.pi0.io/sponsors.svg?xyz"
+        type="image/svg+xml"
+        style="max-width: 100%; pointer-events: auto"
+      >
+        <a href="https://sponsors.pi0.io/">Sponsors</a>
+      </object>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container">
+        <p>
+          <a href="https://github.com/pithings/voipi">GitHub</a>
+          &nbsp;&middot;&nbsp;
+          <a href="https://npmx.dev/package/voipi">npm</a>
+          &nbsp;&middot;&nbsp; Made with &hearts; by
+          <a href="https://github.com/pi0">pi0</a>
+          &nbsp;&middot;&nbsp; Published under
+          <a href="https://github.com/pithings/voipi/blob/main/LICENSE">MIT</a>
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      function copySnippet(el) {
+        const clone = el.cloneNode(true);
+        clone.querySelectorAll(".copied, .bundle-size").forEach((n) => n.remove());
+        const text = clone.textContent.replace(/\/\/.*\n?/, "").trim();
+        navigator.clipboard.writeText(text);
+        const badge = el.querySelector(".copied");
+        badge.classList.add("show");
+        setTimeout(() => badge.classList.remove("show"), 1500);
+      }
+
+      function copyInstall(el) {
+        const code = el
+          .querySelector("code")
+          .textContent.replace(/\s+/g, " ")
+          .trim()
+          .replace(/^\$\s*/, "");
+        navigator.clipboard.writeText(code);
+        const badge = el.querySelector(".copied");
+        badge.classList.add("show");
+        setTimeout(() => badge.classList.remove("show"), 1500);
+      }
+
+      var lastPlayed;
+      document.querySelectorAll("audio").forEach((audio) => {
+        audio.addEventListener("play", () => {
+          lastPlayed = audio;
+          document.querySelectorAll("audio").forEach((other) => {
+            if (other !== audio) other.pause();
+          });
+        });
+      });
+
+      var demoWrap = document.querySelector(".demo-wrap");
+      var demoImg = demoWrap.querySelector("img");
+      demoWrap.addEventListener("click", function () {
+        var audios = document.querySelectorAll("audio");
+        audios.forEach(function (a) {
+          a.pause();
+        });
+        var pick = lastPlayed || audios[Math.floor(Math.random() * audios.length)];
+        pick.currentTime = 0;
+        pick.play();
+        demoWrap.classList.add("playing");
+        demoImg.classList.remove("playing");
+        demoImg.offsetWidth;
+        demoImg.classList.add("playing");
+      });
+      document.querySelectorAll("audio").forEach(function (a) {
+        a.addEventListener("ended", function () {
+          demoWrap.classList.remove("playing");
+        });
+      });
+    </script>
+  </body>
+</html>

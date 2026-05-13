@@ -1,0 +1,675 @@
+ChangeLog and TODO list for blackarch-installer
+===============================================
+
+
+[ ] task to be performed
+[.] ongoing task
+[x] finished task
+
+
+===> 1.x.x
+
+  [ ] new option: if possible add 'skip' for each asking sections
+  [ ] new option: add resume functionality
+  [ ] new option: add restart installer option
+  [ ] new option: go back to previous section
+  [ ] new option: ask for optional partitions
+  [ ] update: support real btrfs support: add flat-tree support (noptrix)
+  [ ] update: check/test uefi installation (especially grub stuff)
+  [ ] update: add help text for each section if feasible
+
+
+===> 1.2.22
+
+  [x] update/sync blackarch-config-vim data
+  [x] ypdate/sync blackarch-cofnig-awesome data
+  [x] ypdate/sync blackarch-cofnig-openbox data
+  [x] ypdate/sync blackarch-cofnig-fluxbox data
+
+
+===> 1.2.21
+
+  [x] reflector: search for max 5 mirrors.
+  [x] set halifax to default mirror
+  [x] remove dead mirrors
+  [x] sleep 10 seconds after dhcpcd call
+
+
+===> 1.2.20
+
+  [x] s/live/full/gi
+
+
+===> 1.2.19
+
+  [x] add default mkinitcpio.* stuff
+  [x] copy correct vmlinux image (fix 'grub' bug)
+  [x] use correct format for counter
+
+
+===> 1.2.18
+
+  [x] Loop if offline install on netinstall is selected
+
+
+===> 1.2.16
+
+  [x] output style fixes
+
+
+===> 1.2.15
+
+  [x] Fix problem in detecting existing partitions
+
+
+===> 1.2.14
+
+  [x] add additional checks for mounted filesystems
+
+
+===> 1.2.13
+
+  [x] stick with default luks encryption settings
+
+
+===> 1.2.12
+
+  [x] remove dkms-guest package for vbox as we use AL's 'linux' kernel
+  [x] add '--checkhostversion' option for vboxclient
+  [x] fix wrong counter lines
+
+
+===> 1.2.11
+
+  [x] fix a typo which lead to wrong install
+  [x] remove a non-existing package from 'extra package' list
+  [x] docs/TODO style fixes
+
+
+===> 1.2.10
+
+  [x] Simply bump version to .XX (.10) in order to trigger self_updater() (i
+      will fix this soon) and use .11, .12, .13 in upcoming versions.
+
+
+===> 1.2.1
+
+  [x] Fix issue with Window Manager/Session Manager fonts. Ref: https://github.com/BlackArch/blackarch/issues/2433
+
+
+===> 1.2.0
+
+  [x] Introduce error handling. This makes the installer able to recover from user errors (like typos).
+  [x] Check for EFI partition if boot mode is UEFI.
+  [x] Improve disk partitions detection using fdisk instead of ls.
+  [x] Improve partition table detection.
+  [x] Introduce defaults for partition filesystems.
+  [x] Show the correct device when suggesting partitions names.
+  [x] Force read to raw input.
+  [x] Verify that partitions are in the partitions list.
+  [x] Exit from the installer explicity.
+  [x] Trap CTRL + c.
+  [x] Add empty partitions list detection.
+
+
+===> 1.1.49
+
+  [x] update: Tune TCP keepalive parameters.
+  [x] update: Add explanation for commenting net.core.somaxconn.
+  [x] update: Optimize some network configurations and add new ones.
+
+
+===> 1.1.48
+
+  [x] update: fix #60 (github).
+
+
+===> 1.1.47
+
+  [x] update: add a new tool (rofi) for WMs.
+  [x] update: change back default mirror
+
+
+===> 1.1.46
+
+  [x] update: retry luks verification if password does not match
+  [x] update: change default mirror (temporary)
+
+
+===> 1.1.45
+
+  [x] update: don't add vbox modules to modules-load.d
+
+
+===> 1.1.44
+
+  [x] update: remove iptables services
+  [x] update: add virtualbox-guest-dkms package
+
+
+===> 1.1.43
+
+  [x] update: disable iptables services
+
+
+===> 1.1.42
+
+  [x] update: just force version bump
+
+
+===> 1.1.41
+
+  [x] update: don't warn when encryption was chosen
+  [x] update: minor style fixes.
+  [x] update: enable only needed services for virtualbox
+  [x] update: update vim config files
+  [x] update: update blackarch-config-<wm> files
+
+
+===> 1.1.40
+
+  [x] update: update default blackarch repo mirror
+
+
+===> 1.1.39
+
+  [x] update: update default blackarch repo mirror
+
+
+===> 1.1.38
+
+  [x] bugfix: 'DisableDownloadTimeout' fix a typo.
+
+
+===> 1.1.37
+
+  [x] bugfix: 'DisableDownloadTimeout' must be in [options] section
+
+
+===> 1.1.36
+
+  [x] update: add 'DisableDownloadTimeout' option in pacman.conf
+
+
+===> 1.1.35
+
+  [x] update: move from wicd to systemd-networkd and iwd.
+  [x] bugfix: removed wicd from packages and added nano to editors.
+  [x] bugfix: move btrfs-progs to main packages, due to mkinitcpio failure find
+              hook to fsck.btrfs.
+  [x] bugfix: copy x11 config files, iff user is asked to install dm and wms.
+
+
+===> 1.1.34
+
+  update: update color for url highlighting
+
+
+===> 1.1.33
+
+  bugfix: fix wrong xinitrc/xprofile handling.
+
+
+===> 1.1.32
+
+  [x] update: don't load vbox stuff if non-vbox host present.
+
+
+===> 1.1.31
+
+  [x] bugfix: fix menu items.
+
+
+===> 1.1.30
+
+  [x] update: update lxdm fonts (use terminus).
+
+
+===> 1.1.29
+
+  [x] update: update WM menus.
+
+
+===> 1.1.28
+
+  [x] update: fix (urxvt stuff) and update menus for WMs
+  [x] update: update urxvt configs directives
+
+
+===> 1.1.27
+
+  [x] update: update urxvt configs + add support for changing font size on the
+              fly
+  [x] update: replace pathogen with Vundle + git* files for bundle packages
+
+
+===> 1.1.26
+
+  [x] update: mkinitcpio as dep in linux package
+  [x] update: added linux + linux-firmware due to base metapackage changes
+
+
+===> 1.1.25
+
+  [x] update: added mkinitcpio
+
+
+===> 1.1.24
+
+  [x] update: separate lxdm xsessions
+  [x] update: iptables cleanup
+  [x] update: arch-release correct
+
+
+===> 1.1.23
+
+  [x] update: updated regex URL matcher
+  [x] update: remove second intel-ucode package
+
+
+===> 1.1.21
+
+  [x] update: vimrc: add auto load buffer for autoread option
+
+
+===> 1.1.20
+
+  [x] update: add a better url-matcher via perl-regex for urxvt (Xresources)
+  [x] update: remove unneeded iptables rule
+
+
+===> 1.1.19
+
+  [x] simple version bump.
+
+
+===> 1.1.18
+
+  [x] update: add xorg-xbacklight package.
+
+
+===> 1.1.17
+
+  [x] bugfix: do not overwrite sudoers
+
+
+===> 1.1.16
+
+  [x] update: add bash_profile
+
+
+===> 1.1.15
+
+  [x] bugfix: add missing redirector.
+
+
+===> 1.1.14
+
+  [x] update: add more default groups to $user
+  [x] update: add user to suders
+
+
+===> 1.1.13
+
+  [x] bugfix: fix sysctl settings.
+
+
+===> 1.1.12
+
+  [x] add network tuning sysctl settings.
+
+
+===> 1.1.11
+
+  [x] add terminus font support for i3.
+
+
+===> 1.1.10
+
+  [x] bugfix: fix missing escape close for PS1 (user).
+
+
+===> 1.1.9
+
+  [x] bugfix: fix missing escape close for PS1.
+
+
+===> 1.1.8
+
+  [x] update: enable wicd by default
+  [x] update: enable dbus and wicd by default
+  [x] update: fix i3 issues and update color themes
+
+
+===> 1.1.7
+
+  [x] update: update wallpapers, logos etc. (new design)
+  [x] update: use new vim config files and themes.
+  [x] update: remove dwm
+  [x] update: update default blackarch mirror
+  [x] update: adjust colors according to the new design
+  [x] update: add new package: rxvt-unicode
+
+
+===> 1.1.6
+
+  [x] update: sync menus for all WMs with blackarch-config-<wm> packages.
+      (bugfix: terminus font issues)
+
+
+===> 1.1.5
+
+  [x] bugfix: fix terminus font issue with lxdm (gtk etc.).
+  [x] bugfix: add missing video driver packages.
+  [x] bugfix: fix self_updater: wrong comparison of version numbers.
+
+
+===> 1.1.4
+
+  [x] update: minor comsmetic changes (posix related)
+  [x] update: remove old/non-existing package.
+
+
+===> 1.1.3
+
+  [x] bugfix: use single quotes for multiple params for sysctl -w call.
+
+
+===> 1.1.2
+
+  [x] bugfix: fix error while loading systemd-sysctl.service
+
+
+===> 1.1.1
+
+  [x] update: add intel and amd ucode packages.
+
+
+===> 1.1.0
+
+  [x] update: improve self_updater()
+  [x] new option: added dual boot support
+  [x] new option: added uefi support
+  [x] update: remove unneeded iptables chain
+
+
+===> 1.0.15
+
+  [x] update: code style fixes
+  [x] update: improvements regarding archlinux keyring
+
+
+===> 1.0.14
+
+  [x] update: remove orphaned and removed packages by community
+
+
+===> 1.0.13
+
+  [x] update: remove wmii and wmii related data/configs.
+
+
+===> 1.0.12
+
+  [x] update: replace wget with curl / replace github.com with yahoo.com
+
+
+===> 1.0.11
+
+  [x] bugfix: fix space fuck-ups due to missing 'pacman -Scc' calls.
+
+
+===> 1.0.10
+
+  [x] update: sync root/user data with blackarch-config-x11
+
+
+===> 1.0.9
+
+  [x] update: sync root/user data with blackarch-config-x11
+
+
+===> 1.0.8
+
+  [x] bugfix: vbox fix + remove unneded update_etc() call.
+  [x] bugfix: fix umount_filesystems() call.
+  [x] update: cleanup umount()
+  [x] update: sync .Xresources/.Xdefaults with blackarch-config-x11
+
+
+===> 1.0.7
+
+  [x] update: update iptables rules
+  [x] update: replace 'relatime' with 'noatime'
+  [x] update: add new default packages (udisks2, upower)
+  [x] update: re-add .Xresources/.Xdefaults
+
+
+===> 1.0.6
+
+  [x] bugfix: typo fixes.
+  [x] update: raise a warning() rather than error() when < 40GB HD space
+  [x] update: data/ clean-ups
+
+
+===> 1.0.5
+
+  [x] bugfix: remove broken alias
+
+
+===> 1.0.4
+
+  [x] update: use single quotes instead of double quotes to tell the
+      overwrite option.
+
+
+===> 1.0.3
+
+  [x] fix SHA1 sum check
+
+
+===> 1.0.2
+
+  [x] remove a package related to zsh
+
+
+===> 1.0.1
+
+  [x] bugfix: github commit id: 2f69fc5d60917ba26e50240bdb341ba0a4cab511
+
+
+===> 1.0
+
+  [x] bugfix: fix (reported) bugs, test everything, fix more bugs...
+  [x] update: sort installation routines (order of sections) (was fine:))
+  [x] new option: ask+print locale to generate/use (atm default: en_US-UTF.8)
+  [x] update: add subtitles to titles, e.g.: >> Foo > Bar
+  [x] new option: add verbose / quiet mode (ask before start). verbose = output
+      of system calls, quiet = no output, only blackarch-installer messages
+  [x] update: check for available disk space before starting to install pkgs
+  [x] update: add progressbar for offline installation mode
+  [x] update: luks: use aes-xts-plain64 + 256bit for keysize
+  [x] update: remove wmii related code
+  [x] update: code style fixes. remove unnecessary curly-brackets
+  [x] new option: blackarch-groups optionally rather than all/single tools
+
+
+===> 0.9.5
+
+  [x] github commit id: f0d668b3f174e26b2b8a4f2bc06e858469c99f90
+  [x] github coomit id: d22a63e02f2dd6b8348377cbb14ee3943835cd9f
+
+
+===> 0.9.4
+
+  [x] Revert "blackarch-install: added mkdir."
+
+
+===> 0.9.3
+
+  [x] version bump only
+
+
+===> 0.9.2
+
+  [x] update: remove/add new packages to extra.
+
+
+===> 0.9.1
+
+  [x] bugfix: fix a wrong wprint() call
+
+
+===> 0.9
+
+  [x] update: remove not needed packages
+  [x] update: ask+print locale to generate/use
+  [x] update: choose/install blackarch-groups optionally rather than all/single tools
+
+
+===> 0.8
+
+  [x] update: remove old packages
+  [x] update: add hardening options (iptables + sysctl)
+
+
+===> 0.7.5
+
+  [x] update: replace '--force' with "--overwrite '*'" option
+
+
+===> 0.7
+
+  [x] new option: add self-updater
+  [x] update: skip asking for BA mirror 2nd time
+  [x] update: more error handling
+  [x] update: clean-up files after live-iso dump
+  [x] update: update grub splash file
+  [x] update: add terminus-font for console (consolefont)
+  [x] update: really skip network stuff if '4. skip' was selected
+  [x] update: ask first for net conf mode before asking for interfaces
+  [x] update: add virtualbox guest modules
+  [x] update: added i3-wm config files
+  [x] update: updated window managers (menus, config files)
+  [x] update: add support for online sha1 sum check
+  [x] update: data files (WMs, ENV, bash, editor, etc.)
+  [x] update: set tabstop + shiftwidth to '2'
+  [x] bugfix: https://github.com/BlackArch/blackarch-installer/issues/23
+  [x] bugfix: fix awesome-wm quit()/exit() issue
+
+
+===> 0.6.2
+
+  [x] update: style fixes, tweaks
+  [x] update: menus
+  [x] update: increase sleep time between wpa_supplicand and dhcpcd
+  [x] bugfix: fix installation fuck-ups (wmii, useradd/groupadd, etc.)
+
+
+===> 0.6
+
+  [x] update: check for wrong inputs (f.e.: wrong partition / devices, etc.)
+  [x] update: add check for mkfs.* status before proceeding (-> $?)
+  [x] update: support for live-iso complete 100% offline installation
+  [x] update: further improvements and bug fixes
+  [x] update: check iso type and skip unnecessary parts for live-iso
+  [x] update: add more /dev/null redirections
+  [x] update: add amdgpu xf86 video driver
+  [x] update: don't echo passphrase for wpa_supplicant
+  [x] update: add sleeps between wpa_supplicant and dhcpcd calls
+  [x] update: reorder wpa_supplicant opts
+  [x] update: style fix (rank mirrors)
+
+
+===> 0.5.2
+
+  [x] update: update SHA1 sum of strap.sh
+
+
+===> 0.5.1
+
+  [x] bugfix: typo in newline for a warning message in time zone setup
+  [x] update: internet connection check (try 3 times instead of 5)
+  [x] bugfix: 'luks not found' issue thanks to CompSciMaj13 @github
+
+
+===> 0.5
+
+  [x] new option: install window manager(s) by choice rather than all
+
+
+===> 0.4.1
+
+  [x] update: removed unavailable extra packages
+  [x] update: added more ${VERBOSE} redirects
+  [x] update: style fixes
+
+
+===> 0.4
+
+  [x] update: wget now check connection
+  [x] new option: timezone selection
+  [x] new option: rankmirrors added
+
+
+===> 0.3.4
+
+  [x] bugfix: fix force recreate partition table cfdisk
+
+
+===> 0.3.3
+
+  [x] bugfix: fix copy of 'xsessions' path
+  [x] update: add force option for mkfs on boot partition
+  [x] bugfix: add multilib support for chroot ENV
+
+
+===> 0.3.2
+
+  [x] update: make cryptsetup use batch-mode to avoid useless confirmations
+  [x] bugfix: remove non-existing x11 video driver packages
+  [x] bugfix: fix wrong path to 'data' dir (configs, x11-settings, etc)
+
+
+===> 0.3
+
+  [x] add wireless setup support
+  [x] add btrfs support
+  [x] use local data/ config files (lxdm, WMs, etc.)
+  [x] update config files
+
+
+===> 0.2
+
+  [x] fix titles for EFI loader
+  [x] update header titles
+  [x] update sha1 sum check for strap.sh
+  [x] fix grub boot splash
+
+
+===> 0.1.4
+
+  [x] bump version
+
+
+===> 0.1.3
+
+  [x] bump version
+
+
+===> 0.1.2
+
+  [x] bump version
+
+
+===> 0.1.1
+
+  [x] update: cp resolv.conf to chroot prior to base pkgs installation
+  [x] update: change menu order for installation mode
+  [x] new option: install from Live-ISO
+
+
+===> 0.1
+
+  [x] update: print partition table before asking for partitions
+  [x] initial release

@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@ai-sdk/google": "^3.0.72",
+    "@google/stitch-sdk": "^0.3.4",
+    "ai": "^6.0.177"
+  }
+}

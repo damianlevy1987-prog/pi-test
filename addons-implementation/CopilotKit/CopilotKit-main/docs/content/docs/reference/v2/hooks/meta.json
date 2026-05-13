@@ -1,0 +1,25 @@
+{
+  "title": "hooks",
+  "pages": [
+    "---Tool Rendering---",
+    "useComponent",
+    "useRenderTool",
+    "useDefaultRenderTool",
+    "useRenderToolCall",
+    "---Agent & Context---",
+    "useAgent",
+    "useAgentContext",
+    "useCapabilities",
+    "useThreads",
+    "---Frontend Tools---",
+    "useFrontendTool",
+    "useHumanInTheLoop",
+    "useInterrupt",
+    "---Suggestions---",
+    "useSuggestions",
+    "useConfigureSuggestions",
+    "---Configuration---",
+    "useCopilotKit",
+    "useCopilotChatConfiguration"
+  ]
+}

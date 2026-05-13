@@ -1,0 +1,16 @@
+{
+  "title": "LlamaIndex",
+  "root": true,
+  "pages": [
+    "---Generative UI---",
+    "...generative-ui",
+    "---App Control---",
+    "shared-state",
+    "---LlamaIndex---",
+    "multi-agent-flows",
+    "---Threads---",
+    "threads",
+    "---Premium Features---",
+    "...premium"
+  ]
+}
