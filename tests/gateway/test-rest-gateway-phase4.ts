@@ -6,6 +6,18 @@ import { app } from '../../src/gateway/rest-gateway';
 const JWT_SECRET = process.env.JWT_SECRET ?? 'dev-jwt-secret';
 
 describe('REST Gateway phase 4', () => {
+  it('has health/ready endpoints', async () => {
+    const health = await request(app).get('/health');
+    const ready = await request(app).get('/ready');
+    expect(health.status).toBe(200);
+    expect(ready.status).toBe(200);
+  });
+
+  it('exposes metrics endpoint', async () => {
+    const res = await request(app).get('/metrics');
+    expect(res.status).toBe(200);
+    expect(typeof res.text).toBe('string');
+  });
   it('refreshes access token', async () => {
     const tokenRes = await request(app).post('/auth/token').send({ subject: 'u4', role: 'analyst' });
     const refreshRes = await request(app)

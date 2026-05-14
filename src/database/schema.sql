@@ -46,3 +46,16 @@ CREATE TABLE IF NOT EXISTS source_configurations (
   priority INTEGER DEFAULT 0,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+CREATE TABLE IF NOT EXISTS auth_refresh_tokens (
+  token UUID PRIMARY KEY,
+  subject VARCHAR(120) NOT NULL,
+  role VARCHAR(20) NOT NULL,
+  revoked BOOLEAN NOT NULL DEFAULT false,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS auth_revoked_tokens (
+  jti UUID PRIMARY KEY,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);

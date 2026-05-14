@@ -1,3 +1,5 @@
+import { AuditRepository } from '../database/repositories/audit-repository';
+
 export type AuditEventType =
   | 'auth_failed'
   | 'validation_failed'
@@ -13,10 +15,20 @@ export interface AuditEvent {
   timestamp: string;
 }
 
+const auditRepository = new AuditRepository();
+
 export function logAuditEvent(event: Omit<AuditEvent, 'timestamp'>): void {
   const payload: AuditEvent = {
     ...event,
     timestamp: new Date().toISOString(),
   };
+
+  void auditRepository.save({
+    eventType: payload.eventType,
+    sourceService: 'rest-gateway',
+    payload,
+    metadata: { path: payload.path, method: payload.method },
+  });
+
   console.log(JSON.stringify({ audit: payload }));
 }

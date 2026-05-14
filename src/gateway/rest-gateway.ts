@@ -7,8 +7,16 @@ import swaggerUi from 'swagger-ui-express';
 import { z } from 'zod';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
-import { randomUUID } from 'node:crypto';
+import { randomUUID, createHash } from 'node:crypto';
 import { logAuditEvent } from '../utils/audit-logger';
+import {
+  createRefreshSession,
+  isJtiRevoked,
+  readRefreshSession,
+  revokeJti,
+  revokeRefreshSession,
+} from '../security/token-store';
+import { incrementMetric, renderPrometheusMetrics } from '../observability/metrics';
 
 const API_KEY = process.env.API_KEY ?? 'dev-api-key';
 const JWT_SECRET = process.env.JWT_SECRET ?? 'dev-jwt-secret';
@@ -21,19 +29,12 @@ interface AuthenticatedRequest extends Request {
   requestId?: string;
 }
 
-const refreshTokens = new Map<string, { sub: string; role: Role }>();
-const revokedAccessJtis = new Set<string>();
-
 const issueAccessToken = (sub: string, role: Role): string => {
   const jti = randomUUID();
   return jwt.sign({ sub, role, jti }, JWT_SECRET, { expiresIn: '1h' });
 };
 
-const issueRefreshToken = (sub: string, role: Role): string => {
-  const token = randomUUID();
-  refreshTokens.set(token, { sub, role });
-  return token;
-};
+const hashIdentity = (value: string): string => createHash('sha256').update(value).digest('hex').slice(0, 16);
 
 const app = express();
 app.use(helmet());
@@ -48,26 +49,55 @@ app.use(
   }),
 );
 app.use(express.json({ limit: '1mb' }));
+app.use((req: AuthenticatedRequest, _res: Response, next: NextFunction) => {
+  req.requestId = req.header('x-request-id') ?? randomUUID();
+  incrementMetric('requests_total');
+  next();
+});
+
 app.use(
+  '/api',
   rateLimit({
     windowMs: 60 * 1000,
     max: Number(process.env.RATE_LIMIT_MAX ?? 120),
+    keyGenerator: (req) => {
+      const apiKey = req.header('x-api-key');
+      if (apiKey) return `api-key:${hashIdentity(apiKey)}`;
+
+      const auth = req.header('authorization');
+      if (auth?.startsWith('Bearer ')) return `bearer:${hashIdentity(auth.slice(7))}`;
+
+      return `ip:${req.ip}`;
+    },
     standardHeaders: true,
     legacyHeaders: false,
   }),
 );
-
-app.use((req: AuthenticatedRequest, _res: Response, next: NextFunction) => {
-  req.requestId = req.header('x-request-id') ?? randomUUID();
-  console.log(JSON.stringify({ trace: { requestId: req.requestId, method: req.method, path: req.path } }));
-  next();
-});
 
 const openApiSpec = readFileSync(resolve(process.cwd(), 'docs/openapi.yaml'), 'utf-8');
 app.get('/openapi.yaml', (_req: Request, res: Response) => {
   res.type('application/yaml').send(openApiSpec);
 });
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(undefined, { swaggerOptions: { url: '/openapi.yaml' } }));
+
+app.get('/health', (_req: Request, res: Response) => {
+  res.json({ status: 'ok' });
+});
+
+app.get('/ready', async (_req: Request, res: Response) => {
+  // Ready when process can issue a token and verify it.
+  try {
+    const token = issueAccessToken('readiness-check', 'analyst');
+    jwt.verify(token, JWT_SECRET);
+    res.json({ status: 'ready' });
+  } catch {
+    res.status(503).json({ status: 'not-ready' });
+  }
+});
+
+app.get('/metrics', (_req: Request, res: Response) => {
+  res.type('text/plain').send(renderPrometheusMetrics());
+});
 
 const issueTokenSchema = z.object({
   subject: z.string().min(1),
@@ -76,7 +106,7 @@ const issueTokenSchema = z.object({
 const refreshSchema = z.object({ refreshToken: z.string().min(1) });
 const revokeSchema = z.object({ refreshToken: z.string().min(1).optional(), accessToken: z.string().min(1).optional() });
 
-app.post('/auth/token', (req: Request, res: Response) => {
+app.post('/auth/token', async (req: Request, res: Response) => {
   const parsed = issueTokenSchema.safeParse(req.body);
   if (!parsed.success) {
     res.status(400).json({ error: 'Invalid request payload', issues: parsed.error.issues });
@@ -84,44 +114,44 @@ app.post('/auth/token', (req: Request, res: Response) => {
   }
 
   const token = issueAccessToken(parsed.data.subject, parsed.data.role);
-  const refreshToken = issueRefreshToken(parsed.data.subject, parsed.data.role);
+  const refreshToken = await createRefreshSession(parsed.data.subject, parsed.data.role);
   res.json({ token, refreshToken });
 });
 
-app.post('/auth/refresh', (req: Request, res: Response) => {
+app.post('/auth/refresh', async (req: Request, res: Response) => {
   const parsed = refreshSchema.safeParse(req.body);
   if (!parsed.success) {
     res.status(400).json({ error: 'Invalid request payload', issues: parsed.error.issues });
     return;
   }
-  const session = refreshTokens.get(parsed.data.refreshToken);
+
+  const session = await readRefreshSession(parsed.data.refreshToken);
   if (!session) {
     res.status(401).json({ error: 'Invalid refresh token' });
     return;
   }
+
   const token = issueAccessToken(session.sub, session.role);
   res.json({ token });
 });
 
-app.post('/auth/revoke', (req: Request, res: Response) => {
+app.post('/auth/revoke', async (req: Request, res: Response) => {
   const parsed = revokeSchema.safeParse(req.body);
   if (!parsed.success) {
     res.status(400).json({ error: 'Invalid request payload', issues: parsed.error.issues });
     return;
   }
-  if (parsed.data.refreshToken) refreshTokens.delete(parsed.data.refreshToken);
+
+  if (parsed.data.refreshToken) await revokeRefreshSession(parsed.data.refreshToken);
   if (parsed.data.accessToken) {
-    try {
-      const decoded = jwt.decode(parsed.data.accessToken) as { jti?: string } | null;
-      if (decoded?.jti) revokedAccessJtis.add(decoded.jti);
-    } catch {
-      // ignore malformed
-    }
+    const decoded = jwt.decode(parsed.data.accessToken) as { jti?: string } | null;
+    if (decoded?.jti) await revokeJti(decoded.jti);
   }
+
   res.json({ status: 'revoked' });
 });
 
-const authMiddleware = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
+const authMiddleware = async (req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> => {
   const providedApiKey = req.header('x-api-key');
   const authHeader = req.header('authorization');
 
@@ -140,10 +170,11 @@ const authMiddleware = (req: AuthenticatedRequest, res: Response, next: NextFunc
   const token = authHeader.slice('Bearer '.length);
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as { sub: string; role: Role; jti?: string };
-    if (decoded.jti && revokedAccessJtis.has(decoded.jti)) {
+    if (decoded.jti && (await isJtiRevoked(decoded.jti))) {
       res.status(401).json({ error: 'Token revoked' });
       return;
     }
+
     req.user = { sub: decoded.sub, role: decoded.role, jti: decoded.jti };
     next();
   } catch {
@@ -189,6 +220,7 @@ app.post('/api/research', requirePolicy('research'), async (req: AuthenticatedRe
   }
   const { topic, sources } = parsed.data;
   logAuditEvent({ eventType: 'request_accepted', path: req.path, method: req.method, ip: req.ip, details: { requestId: req.requestId } });
+  incrementMetric('research_requests_total');
   res.json({ status: 'success', topic, sources, requestId: req.requestId });
 });
 
@@ -201,6 +233,7 @@ app.post('/api/context', requirePolicy('context'), async (req: AuthenticatedRequ
   }
   const { agent_id, topic } = parsed.data;
   logAuditEvent({ eventType: 'request_accepted', path: req.path, method: req.method, ip: req.ip, details: { requestId: req.requestId } });
+  incrementMetric('context_requests_total');
   res.json({ status: 'success', agent_id, topic, requestId: req.requestId });
 });
 
@@ -213,6 +246,7 @@ app.post('/api/dispatch', requirePolicy('dispatch'), async (req: AuthenticatedRe
   }
   const { agent, task } = parsed.data;
   logAuditEvent({ eventType: 'request_accepted', path: req.path, method: req.method, ip: req.ip, details: { requestId: req.requestId } });
+  incrementMetric('dispatch_requests_total');
   res.json({ status: 'success', agent, task, requestId: req.requestId });
 });
 
