@@ -1,24 +1,26 @@
 # Progress
 
 ## Status
-Phase 8 Complete
+Phase 6 complete
 
 ## Tasks
-- Added SECURITY.md vulnerability reporting policy
-- Added threat model and security checklist doc
-- Added CODEOWNERS baseline
-- Added security scripts to package.json
-- Added final verification script (`scripts/verify.sh`)
-- Added abuse scenario tests (auth bypass + oversized payload)
-- Ran lint, typecheck, tests, and audit-high verification
+- Added Dockerfile for Node 22 production runtime with build + runtime stages
+- Added docker-compose stack for app + postgres with health checks
+- Added migration bootstrap script using `src/database/schema.sql`
+- Added postgres wait script and container startup script
+- Added npm scripts: `build`, `start`, `migrate`, `dev:start`
+- Updated `.env.example` for container/runtime parity
 
 ## Files Changed
-- SECURITY.md
-- docs/security/threat-model.md
-- .github/CODEOWNERS
-- scripts/verify.sh
+- Dockerfile
+- docker-compose.yml
+- scripts/wait-for-postgres.sh
+- scripts/start.sh
+- scripts/migrate.js
+- src/server.ts
 - package.json
-- tests/gateway/test-rest-gateway-phase8.ts
+- .env.example
 
 ## Notes
-Phase 8 security/compliance hardening implemented and validated.
+- Startup flow: wait for postgres -> run migration -> start API server.
+- Migration script safely no-ops when `DATABASE_URL` is unset.

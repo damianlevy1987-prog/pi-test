@@ -1,0 +1,43 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: ai-os-postgres
+    environment:
+      POSTGRES_DB: ai_os_security
+      POSTGRES_USER: ai_os
+      POSTGRES_PASSWORD: ai_os_password
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ai_os -d ai_os_security']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ai-os-app
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      API_KEY: dev-api-key
+      JWT_SECRET: change-me
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      DATABASE_URL: postgres://ai_os:ai_os_password@postgres:5432/ai_os_security
+      ALLOWED_ORIGINS: http://localhost:3000
+      RATE_LIMIT_MAX: 120
+    ports:
+      - '3000:3000'
+
+volumes:
+  postgres_data:
