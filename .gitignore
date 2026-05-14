@@ -1,1 +1,29 @@
+# Dependencies
 node_modules/
+
+# Build outputs
+dist/
+coverage/
+
+# Runtime / temp
+*.log
+*.tmp
+.tmp/
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# IDE/editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test caches
+.vitest/

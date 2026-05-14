@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import { ResearchService } from '../../src/services/research-service';
 import { EventBus } from '../../src/event-bus';
 
@@ -15,7 +15,7 @@ describe('ResearchService', () => {
     const request = {
       topic: 'SQL injection',
       sources: ['web'],
-      options: { depth: 'shallow' }
+      options: { depth: 'shallow' as const }
     };
     const result = await researchService.handleRequest(request);
     expect(result.topic).toBe('SQL injection');
@@ -26,7 +26,7 @@ describe('ResearchService', () => {
     const request = {
       topic: 'XSS vulnerability',
       sources: ['web', 'database', 'file'],
-      options: { depth: 'deep' }
+      options: { depth: 'deep' as const }
     };
     const result = await researchService.handleRequest(request);
     expect(result.topic).toBe('XSS vulnerability');

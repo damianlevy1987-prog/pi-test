@@ -18,7 +18,7 @@ export class APIHandler {
     return { data: { results: [] }, status: 200, headers: {} };
   }
   
-  async post(endpoint: string, body: any): Promise<APIResponse> {
+  async post(endpoint: string, _body: any): Promise<APIResponse> {
     console.log(`APIHandler POST: ${this.baseURL}${endpoint}`);
     return { data: { success: true }, status: 201, headers: {} };
   }

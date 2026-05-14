@@ -11,7 +11,7 @@ describe('KafkaEventBus', () => {
   it('should publish and subscribe', async () => {
     const bus = new KafkaEventBus({ brokers: ['localhost:9092'], clientId: 'test', groupId: 'test' });
     let received: any = null;
-    await bus.subscribe('test.event', async (data) => { received = data; });
+    await bus.subscribe('test.event', async (data: any) => { received = data; });
     await bus.publish('test.event', { message: 'hello' });
     expect(received.message).toBe('hello');
   });

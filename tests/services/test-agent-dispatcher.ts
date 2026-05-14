@@ -16,7 +16,7 @@ describe('AgentDispatcher', () => {
       agent_id: 'scout-001',
       task_type: 'reconnaissance',
       payload: { target: 'example.com' },
-      priority: 'high'
+      priority: 'high' as const
     };
     const taskId = await dispatcher.dispatch(task);
     expect(taskId).toMatch(/^task_/);

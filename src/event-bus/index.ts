@@ -1,4 +1,4 @@
-type EventHandler = (payload: any) => Promise<void>;
+export type EventHandler = (payload: any) => Promise<void>;
 
 export class EventBus {
   private handlers: Map<string, EventHandler[]> = new Map();

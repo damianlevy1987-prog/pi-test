@@ -1,9 +1,9 @@
-import express from 'express';
+import express, { type Request, type Response } from 'express';
 
 const app = express();
 app.use(express.json());
 
-app.post('/api/research', async (req, res) => {
+app.post('/api/research', async (req: Request, res: Response) => {
   try {
     const { topic, sources } = req.body;
     console.log(`Research request: ${topic}, sources: ${sources}`);
@@ -13,9 +13,9 @@ app.post('/api/research', async (req, res) => {
   }
 });
 
-app.post('/api/context', async (req, res) => {
+app.post('/api/context', async (req: Request, res: Response) => {
   try {
-    const { agent_id, topic, inputs } = req.body;
+    const { agent_id, topic } = req.body;
     console.log(`Context build: ${agent_id} - ${topic}`);
     res.json({ status: 'success', agent_id, topic });
   } catch (error) {
@@ -23,7 +23,7 @@ app.post('/api/context', async (req, res) => {
   }
 });
 
-app.post('/api/dispatch', async (req, res) => {
+app.post('/api/dispatch', async (req: Request, res: Response) => {
   try {
     const { agent, task } = req.body;
     console.log(`Dispatch to ${agent}: ${task.action}`);
@@ -33,7 +33,7 @@ app.post('/api/dispatch', async (req, res) => {
   }
 });
 
-app.get('/api/agents', (_req, res) => {
+app.get('/api/agents', (_req: Request, res: Response) => {
   res.json(['scout', 'vulnhunter', 'exploiter', 'shadowops', 'webbreaker', 'airwave', 'digitalwatcher', 'cloudbreacher', 'domainhunter', 'humanphisher']);
 });
 

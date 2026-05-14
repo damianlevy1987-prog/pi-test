@@ -11,7 +11,10 @@ export class ContextCache {
   }
   
   async set(key: string, data: any): Promise<void> {
-    if (this.cache.size >= this.maxSize) { const first = this.cache.keys().next().value; this.cache.delete(first); }
+    if (this.cache.size >= this.maxSize) {
+      const first = this.cache.keys().next().value;
+      if (first) this.cache.delete(first);
+    }
     this.cache.set(key, { data, expiry: Date.now() + this.ttl });
   }
   

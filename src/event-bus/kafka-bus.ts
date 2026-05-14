@@ -1,4 +1,4 @@
-import { EventBus, EventHandler } from './index';
+import type { EventHandler } from './index';
 
 export interface KafkaEventBusConfig {
   brokers: string[];
@@ -6,7 +6,7 @@ export interface KafkaEventBusConfig {
   groupId: string;
 }
 
-export class KafkaEventBus implements EventBus {
+export class KafkaEventBus {
   private handlers: Map<string, Set<EventHandler>> = new Map();
   private config: KafkaEventBusConfig;
   private connected: boolean = false;

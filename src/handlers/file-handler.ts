@@ -5,5 +5,5 @@ export class FileHandler {
     return [];
   }
   async readFile(filePath: string): Promise<string> { return fs.readFileSync(filePath, 'utf-8'); }
-  async glob(pattern: string, _directory: string): Promise<string[]> { return []; }
+  async glob(_pattern: string, _directory: string): Promise<string[]> { return []; }
 }

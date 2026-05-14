@@ -28,7 +28,7 @@ export class IntegrationService {
     this.integrations.delete(name);
   }
   
-  async invoke(integrationName: string, action: string, payload: any): Promise<any> {
+  async invoke(integrationName: string, action: string, _payload: any): Promise<any> {
     const integration = this.integrations.get(integrationName);
     if (!integration) {
       throw new Error(`Integration not found: ${integrationName}`);
