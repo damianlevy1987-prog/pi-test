@@ -1,8 +1,8 @@
 openapi: 3.1.0
 info:
   title: AI OS Security API
-  version: 1.1.0
-  description: Hardened API with API-key auth, rate limiting, and request validation.
+  version: 1.2.0
+  description: Hardened API with JWT/API-key auth, RBAC, rate limiting, and request validation.
 servers:
   - url: http://localhost:3000
 components:
@@ -11,12 +11,25 @@ components:
       type: apiKey
       in: header
       name: x-api-key
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     Error:
       type: object
       properties:
         error:
           type: string
+    TokenRequest:
+      type: object
+      required: [subject, role]
+      properties:
+        subject:
+          type: string
+        role:
+          type: string
+          enum: [analyst, operator, admin]
     ResearchRequest:
       type: object
       required: [topic, sources]
@@ -54,10 +67,25 @@ components:
               type: string
 security:
   - ApiKeyAuth: []
+  - BearerAuth: []
 paths:
+  /auth/token:
+    post:
+      summary: Issue JWT token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRequest'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Validation error
   /api/research:
     post:
-      summary: Run research
+      summary: Run research (analyst/operator/admin)
       requestBody:
         required: true
         content:
@@ -69,15 +97,13 @@ paths:
           description: Success
         '400':
           description: Validation error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
         '401':
           description: Unauthorized
+        '403':
+          description: Forbidden
   /api/context:
     post:
-      summary: Build context
+      summary: Build context (analyst/operator/admin)
       requestBody:
         required: true
         content:
@@ -91,9 +117,11 @@ paths:
           description: Validation error
         '401':
           description: Unauthorized
+        '403':
+          description: Forbidden
   /api/dispatch:
     post:
-      summary: Dispatch task
+      summary: Dispatch task (operator/admin)
       requestBody:
         required: true
         content:
@@ -107,11 +135,15 @@ paths:
           description: Validation error
         '401':
           description: Unauthorized
+        '403':
+          description: Forbidden
   /api/agents:
     get:
-      summary: List agents
+      summary: List agents (analyst/operator/admin)
       responses:
         '200':
           description: Success
         '401':
           description: Unauthorized
+        '403':
+          description: Forbidden
