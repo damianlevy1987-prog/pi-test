@@ -1,8 +1,8 @@
 openapi: 3.1.0
 info:
   title: AI OS Security API
-  version: 1.2.0
-  description: Hardened API with JWT/API-key auth, RBAC, rate limiting, and request validation.
+  version: 1.3.0
+  description: Hardened API with JWT/API-key auth, RBAC, refresh/revoke, rate limiting, and validation.
 servers:
   - url: http://localhost:3000
 components:
@@ -21,57 +21,48 @@ components:
       properties:
         error:
           type: string
+        issues:
+          type: array
+          items:
+            type: object
     TokenRequest:
       type: object
       required: [subject, role]
       properties:
         subject:
           type: string
+          example: user-123
         role:
           type: string
           enum: [analyst, operator, admin]
-    ResearchRequest:
+          example: analyst
+    TokenResponse:
       type: object
-      required: [topic, sources]
       properties:
-        topic:
+        token:
           type: string
-          minLength: 1
-          maxLength: 500
-        sources:
-          type: array
-          items:
-            type: string
-            enum: [web, database, file, api]
-    ContextRequest:
+        refreshToken:
+          type: string
+    RefreshRequest:
       type: object
-      required: [agent_id, topic]
+      required: [refreshToken]
       properties:
-        agent_id:
+        refreshToken:
           type: string
-        topic:
-          type: string
-    DispatchRequest:
+    RevokeRequest:
       type: object
-      required: [agent, task]
       properties:
-        agent:
+        refreshToken:
           type: string
-        task:
-          type: object
-          required: [action]
-          properties:
-            action:
-              type: string
-            target:
-              type: string
+        accessToken:
+          type: string
 security:
   - ApiKeyAuth: []
   - BearerAuth: []
 paths:
   /auth/token:
     post:
-      summary: Issue JWT token
+      summary: Issue JWT + refresh token
       requestBody:
         required: true
         content:
@@ -81,17 +72,45 @@ paths:
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
         '400':
           description: Validation error
-  /api/research:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /auth/refresh:
     post:
-      summary: Run research (analyst/operator/admin)
+      summary: Exchange refresh token for new access token
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ResearchRequest'
+              $ref: '#/components/schemas/RefreshRequest'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Invalid refresh token
+  /auth/revoke:
+    post:
+      summary: Revoke refresh token and/or access token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RevokeRequest'
+      responses:
+        '200':
+          description: Success
+  /api/research:
+    post:
+      summary: Run research (analyst/operator/admin)
       responses:
         '200':
           description: Success
@@ -104,12 +123,6 @@ paths:
   /api/context:
     post:
       summary: Build context (analyst/operator/admin)
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ContextRequest'
       responses:
         '200':
           description: Success
@@ -122,12 +135,6 @@ paths:
   /api/dispatch:
     post:
       summary: Dispatch task (operator/admin)
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DispatchRequest'
       responses:
         '200':
           description: Success

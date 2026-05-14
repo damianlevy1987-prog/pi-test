@@ -11,7 +11,7 @@ describe('REST Gateway hardening', () => {
   it('accepts valid API key', async () => {
     const res = await request(app).get('/api/agents').set('x-api-key', 'dev-api-key');
     expect(res.status).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true);
+    expect(Array.isArray(res.body.agents)).toBe(true);
   });
 
   it('validates research payload', async () => {
