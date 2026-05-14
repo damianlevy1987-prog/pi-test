@@ -1,0 +1,8 @@
+# Baseline owners
+* @damianlevy1987-prog
+
+# Security-sensitive paths
+/src/gateway/ @damianlevy1987-prog
+/src/security/ @damianlevy1987-prog
+/src/database/ @damianlevy1987-prog
+/docs/security/ @damianlevy1987-prog
