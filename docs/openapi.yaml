@@ -1,0 +1,117 @@
+openapi: 3.1.0
+info:
+  title: AI OS Security API
+  version: 1.1.0
+  description: Hardened API with API-key auth, rate limiting, and request validation.
+servers:
+  - url: http://localhost:3000
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+    ResearchRequest:
+      type: object
+      required: [topic, sources]
+      properties:
+        topic:
+          type: string
+          minLength: 1
+          maxLength: 500
+        sources:
+          type: array
+          items:
+            type: string
+            enum: [web, database, file, api]
+    ContextRequest:
+      type: object
+      required: [agent_id, topic]
+      properties:
+        agent_id:
+          type: string
+        topic:
+          type: string
+    DispatchRequest:
+      type: object
+      required: [agent, task]
+      properties:
+        agent:
+          type: string
+        task:
+          type: object
+          required: [action]
+          properties:
+            action:
+              type: string
+            target:
+              type: string
+security:
+  - ApiKeyAuth: []
+paths:
+  /api/research:
+    post:
+      summary: Run research
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResearchRequest'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+  /api/context:
+    post:
+      summary: Build context
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContextRequest'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Validation error
+        '401':
+          description: Unauthorized
+  /api/dispatch:
+    post:
+      summary: Dispatch task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DispatchRequest'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Validation error
+        '401':
+          description: Unauthorized
+  /api/agents:
+    get:
+      summary: List agents
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
